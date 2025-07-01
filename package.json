@@ -1,0 +1,508 @@
+{
+    "name": "skeleton",
+    "label": "Skeleton",
+    "dependencies": [
+        {
+            "type": "service",
+            "name": "http",
+            "version": "v1.8.5"
+        },
+        {
+            "type": "package",
+            "name": "oauth",
+            "version": "v1.0.34"
+        }
+    ],
+    "configurationBuilder": "/configurationBuilder.js",
+    "configuration": [
+        {
+            "label": "Entity",
+            "name": "entity",
+            "type": "entity"
+        },
+        {
+            "label": "Field",
+            "name": "entityField",
+            "type": "entityField",
+            "visibility": "@config.entity",
+            "required": "@config.entity",
+            "typeOptions": {
+                "entity": "@config.entity"
+            }
+        },
+        {
+            "label": "Action",
+            "name": "entityAction",
+            "type": "entityAction",
+            "visibility": "@config.entity",
+            "value": "addANote",
+            "typeOptions": {
+                "entity": "@config.entity"
+            }
+        },
+        {
+            "label": "Accounts",
+            "name": "accounts",
+            "type": "entityMapper",
+            "typeOptions": {
+                "allowToCreateEntity": true,
+                "allowToSelectDirection": true,
+                "allowToSelectInitialSync": false,
+                "recordNameField": "name",
+                "fields": [
+                    {
+                        "label": "Name",
+                        "name": "name",
+                        "type": "text",
+                        "multiplicity": "one"
+                    },
+                    {
+                        "label": "Type",
+                        "name": "type",
+                        "type": "choice",
+                        "multiplicity": "one",
+                        "options": {
+                            "possibleValues": [
+                                {"label": "Client", "name": "client"},
+                                {"label": "Prospect", "name": "prospect"},
+                                {"label": "Other", "name": "other"}
+                            ]
+                        }
+                    },
+                    {
+                        "label": "Relationship",
+                        "name": "relation",
+                        "type": "relationship",
+                        "multiplicity": "one",
+                        "options": {
+                            "entity": "@config.entity"
+                        }
+                    },
+                    {
+                        "label": "Address",
+                        "name": "address",
+                        "type": "nestedFields",
+                        "multiplicity": "one",
+                        "options": {
+                            "nestedFields": [
+                                {
+                                    "label": "Streets",
+                                    "name": "streets",
+                                    "type": "text",
+                                    "multiplicity": "many"
+                                },
+                                {
+                                    "label": "State",
+                                    "name": "state",
+                                    "type": "choice",
+                                    "multiplicity": "one",
+                                    "options": {
+                                        "possibleValues": [
+                                            {"label": "Arizona", "name": "AZ"},
+                                            {"label": "New York", "name": "NY"},
+                                            {"label": "California", "name": "CA"}
+                                        ]
+                                    }
+                                },
+                                {
+                                    "label": "Contact",
+                                    "name": "contact",
+                                    "type": "nestedFields",
+                                    "multiplicity": "many",
+                                    "options": {
+                                        "nestedFields": [
+                                            {
+                                                "label": "Name",
+                                                "name": "name",
+                                                "type": "text",
+                                                "multiplicity": "one"
+                                            },
+                                            {
+                                                "label": "Phones",
+                                                "name": "phones",
+                                                "type": "phone",
+                                                "multiplicity": "many"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "hooks": [
+                    {
+                        "label": "Syncing to app",
+                        "name": "syncingToApp",
+                        "params": ["record", "oldRecord", "data"]
+                    },
+                    {
+                        "label": "Syncing to Autotask",
+                        "name": "syncingToAutotask",
+                        "params": ["record", "data", "other"]
+                    },
+                    {
+                        "label": "Other script",
+                        "name": "otherScript"
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Labels",
+            "name": "labels",
+            "type": "label",
+            "value": "labels"
+        },
+        {
+            "label": "Simple",
+            "name": "simpleLabel",
+            "type": "label",
+            "value": "Sample Complex endpoint"
+        },
+        {
+            "label": "Concatenation",
+            "name": "concatenation",
+            "type": "label",
+            "value": "'Prefix ['+(config.entity ? config.entity : 'No entity') +'] > ['+(config.entityField ? config.entityField : 'No field')+'] > ['+(config.entityAction ? config.entityAction : 'No action')+']'"
+        },
+        {
+            "label": "Inputs",
+            "name": "inputs",
+            "type": "label",
+            "value": "inputs"
+        },
+        {
+            "label": "Email",
+            "name": "email",
+            "type": "text",
+            "required": false,
+            "typeOptions": {
+                "validation": "email"
+            }
+        },
+        {
+            "label": "Password",
+            "name": "password",
+            "type": "password",
+            "required": false
+        },
+        {
+            "label": "Bool",
+            "name": "boolean",
+            "type": "toggle"
+        },
+        {
+            "label": "Multi bools",
+            "name": "boolean",
+            "multiplicity": "many",
+            "type": "toggle"
+        },
+        {
+            "label": "Script",
+            "name": "actionScript",
+            "type": "script",
+            "required": false
+        },
+        {
+            "label": "Multi scripts",
+            "name": "actionScripts",
+            "type": "script",
+            "multiplicity": "many",
+            "typeOptions": {
+                "parameters": ["foo", "bar"]
+            }
+        },
+        {
+            "label": "Buttons",
+            "name": "buttons",
+            "type": "fieldsGroup",
+            "typeOptions": {
+                "fields":[
+                    {
+                        "label": "Set email",
+                        "name": "setEmail",
+                        "type": "button",
+                        "typeOptions": {
+                            "color": "info",
+                            "icon": "zmdi zmdi-email",
+                            "action": "if (!config.inputs.email) { config.inputs.email = 'test1@slingr.io'; }"
+                        }
+                    },
+                    {
+                        "label": "Clear email",
+                        "name": "clearEmail",
+                        "type": "button",
+                        "typeOptions": {
+                            "color": "success",
+                            "icon": "https://cdn1.iconfinder.com/data/icons/emails-set/26/Mail-Remove_x-512.png",
+                            "action": "config.inputs.email=null;"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Switchers",
+            "name": "switchers",
+            "type": "label",
+            "value": "switchers"
+        },
+        {
+            "label": "Custom",
+            "name": "customSwitcher",
+            "type": "buttonsGroup",
+            "multiplicity": "one",
+            "required": false,
+            "defaultValue": "${TEST1}",
+            "typeOptions": {
+                "allowCustom": true,
+                "possibleValues":[
+                    {
+                        "label":"Danger",
+                        "name":"danger"
+                    },
+                    {
+                        "label":"Warning",
+                        "name":"warn"
+                    },
+                    {
+                        "label":"Information",
+                        "name":"info"
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Simple",
+            "name": "switcher",
+            "type": "buttonsGroup",
+            "multiplicity": "one",
+            "required": false,
+            "defaultValue": "warn",
+            "typeOptions": {
+                "allowCustom": true,
+                "possibleValues":[
+                    {
+                        "label":"Danger",
+                        "name":"danger"
+                    },
+                    {
+                        "label":"Warning",
+                        "name":"warn"
+                    },
+                    {
+                        "label":"Information",
+                        "name":"info"
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Dropdowns",
+            "name": "dropdowns",
+            "type": "label",
+            "value": "dropdowns"
+        },
+        {
+            "label": "Simple",
+            "name": "dropDown",
+            "type": "dropDown",
+            "multiplicity": "one",
+            "defaultValue": "AZ",
+            "typeOptions": {
+                "possibleValues":[
+                    {
+                        "label":"New York",
+                        "name":"NY"
+                    },
+                    {
+                        "label":"Arizona",
+                        "name":"AZ"
+                    },
+                    {
+                        "label":"California",
+                        "name":"CA"
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Custom",
+            "name": "customDropDown",
+            "type": "dropDown",
+            "multiplicity": "one",
+            "typeOptions": {
+                "allowCustom": true,
+                "possibleValues":[
+                    {
+                        "label":"New York",
+                        "name":"NY"
+                    },
+                    {
+                        "label":"Arizona",
+                        "name":"AZ"
+                    },
+                    {
+                        "label":"California",
+                        "name":"CA"
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Nested",
+            "name": "nested",
+            "type": "fieldsGroup",
+            "typeOptions": {
+                "fields":[
+                    {
+                        "label": "Set first nested zip code",
+                        "name": "setNestedZip",
+                        "type": "button",
+                        "typeOptions": {
+                            "color": "default",
+                            "icon": "zmdi zmdi-email",
+                            "action": "if (!config.nested.manyNested[0].zip || config.nested.manyNested[0].zip == 1234) { config.nested.manyNested[0].zip = 3333; }"
+                        }
+                    },
+                    {
+                        "label": "Clear first nested zip code",
+                        "name": "clearNestedZip",
+                        "type": "button",
+                        "typeOptions": {
+                            "color": "primary",
+                            "icon": "https://cdn1.iconfinder.com/data/icons/emails-set/26/Mail-Remove_x-512.png",
+                            "action": "config.nested.manyNested[0].zip=null;"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Entities",
+            "name": "entities",
+            "type": "label",
+            "value": "entities"
+        },
+        {
+            "label": "Set Contacts entity",
+            "name": "setEntity",
+            "type": "button",
+            "typeOptions": {
+                "color": "warning",
+                "icon": "zmdi zmdi-check",
+                "action": "if (!config.entity) { config.entity = 'contacts'; }"
+            }
+        },
+        {
+            "label": "Clear entity",
+            "name": "clearEntity",
+            "type": "button",
+            "typeOptions": {
+                "color": "danger",
+                "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAvID_hN1G47XcpvLkcOYfli4slxtLLTiK2LwnqRnfoXTeCUmv",
+                "action": "config.entity=null;"
+            }
+        },
+        {
+            "label": "Action - Contacts",
+            "name": "entityAction2",
+            "type": "entityAction",
+            "visibility": "@config.entity=='contacts'",
+            "required": "config.entity=='contacts'",
+            "typeOptions": {
+                "entity": "@config.entity"
+            }
+        },
+        {
+            "label": "Action - Address State",
+            "name": "entityAction3",
+            "type": "entityAction",
+            "visibility": "config.entityField=='address.state'",
+            "typeOptions": {
+                "entity": "@config.entity"
+            }
+        },
+        {
+            "label": "Filters",
+            "name": "entityFilters",
+            "type": "entityFilters",
+            "typeOptions": {
+                "entity": "@config.entity"
+            }
+        },
+        {
+            "label": "Events",
+            "name": "entityEvents",
+            "type": "entityEvents",
+            "typeOptions": {
+                "entity": "@config.entity"
+            }
+        },
+        {
+            "label": "User or long text",
+            "name": "userOrChoice",
+            "type": "entityField",
+            "showLabel": false,
+            "visibility": "@config.entity",
+            "typeOptions": {
+                "entity": "@config.entity",
+                "filterTypes": ["user", "choice"]
+            }
+        },
+        {
+            "label": "Information",
+            "name": "information",
+            "type": "info",
+            "typeOptions": {
+                "alertType": "warning"
+            },
+            "value": "Follow these points to generate a new credentials:<ul><li>Access to the Dev Console</li><li>Create a new project. Copy the 'Project Name' in the configuration form.</li><li>...</li></ul>"
+        }
+    ],
+    "events": [
+        {
+            "label": "Webhook",
+            "name": "webhook",
+            "description": "Event triggered when there is a webhook coming from PandaDoc."
+        },
+        {
+            "label": "Callback",
+            "name": "callback",
+            "description": "Happens when a async process is finished"
+        }
+    ],
+    "metadata": [
+        {
+            "type": "script",
+            "namespace": "api",
+            "path": "/scripts/api.js"
+        },
+        {
+            "type": "script",
+            "namespace": "utils",
+            "path": "/scripts/utils.js"
+        },
+        {
+            "type": "listener",
+            "namespace": "webhook",
+            "path": "/listeners/webhook.js"
+        },
+        {
+            "type": "flowStep",
+            "namespace": "apiCallSkeleton",
+            "path": "/flowSteps/apiCallSkeleton"
+        },
+        {
+            "type": "flowStep",
+            "namespace": "customFlow",
+            "path": "/flowSteps/customFlow"
+        },
+        {
+            "type": "uiService",
+            "namespace": "testUiService",
+            "path": "/uiServices/testUiService"
+        }
+    ]
+}
