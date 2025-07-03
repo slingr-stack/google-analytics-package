@@ -1,0 +1,19 @@
+{
+  "name": "googleAnalytics",
+  "label": {
+    "translation": {
+      "en": "Google Analytics",
+      "es": "Google Analytics"
+    }
+  },
+  "places": [
+    "APP",
+    "LOGIN"
+  ],
+  "dependencies": [],
+  "byGroups": false,
+  "functions": [
+  ],
+  "events": [
+  ]
+}
