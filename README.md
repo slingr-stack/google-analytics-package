@@ -1,5 +1,7 @@
 # Overview
 
+Repo: [https://github.com/slingr-stack/google-analytics-package](https://github.com/slingr-stack/google-analytics-package)
+
 This package provides a UI Service to track user activity in your Slingr application and send it to Google Analytics using custom events.
 
 It automatically tracks:
