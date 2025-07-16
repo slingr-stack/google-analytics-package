@@ -27,7 +27,7 @@ To set up Google Analytics with this UI Service:
 
 ## Requirements
 
-- You must define the environment variable `GA_MEASUREMENT_ID` in your app.
+- **You must define the environment variable `GA_MEASUREMENT_ID` in your app.**
 
 ## Event Details
 
