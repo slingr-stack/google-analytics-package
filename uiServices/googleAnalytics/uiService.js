@@ -2,15 +2,18 @@
  * @fileoverview
  * This script initializes Google Analytics and tracks application events
  * by intercepting XMLHttpRequest requests.
- * It has been refactored for better readability, code deduplication,
- * and maintainability by separating concerns.
  */
 
 (function initializeGATracking() {
+    const GA_MEASUREMENT_ID = `${GA_MEASUREMENT_ID}`;
+    if (!GA_MEASUREMENT_ID) {
+        throw new Error('[GA UI Service] Missing GA_MEASUREMENT_ID environment variable.');
+    }
+
     // This section injects the gtag script and configures it.
     const script = document.createElement('script');
     script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-Q31RSJXCFB';
+    script.src = 'https://www.googletagmanager.com/gtag/js?id='+GA_MEASUREMENT_ID;
     document.head.appendChild(script);
 
     window.dataLayer = window.dataLayer || [];
@@ -20,7 +23,7 @@
     gtag('js', new Date());
     // Configure GA: Disable automatic page_view events to avoid conflicts.
     // We will send our own custom 'view_accessed' event.
-    gtag('config', 'G-Q31RSJXCFB', {
+    gtag('config', GA_MEASUREMENT_ID, {
         'send_page_view': false,
         'debug_mode':true
     });
