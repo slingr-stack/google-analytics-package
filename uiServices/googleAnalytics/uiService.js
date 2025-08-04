@@ -5,15 +5,18 @@
  */
 
 (function initializeGATracking() {
-    const GA_MEASUREMENT_ID = `${GA_MEASUREMENT_ID}`;
-    if (!GA_MEASUREMENT_ID) {
-        throw new Error('[GA UI Service] Missing GA_MEASUREMENT_ID environment variable.');
+    let MEASUREMENT_ID;
+    try {
+        MEASUREMENT_ID = `${GA_MEASUREMENT_ID}`;
+    } catch (e) {
+        console.error('[GA UI Service] Missing GA_MEASUREMENT_ID environment variable.');
+        return;
     }
 
     // This section injects the gtag script and configures it.
     const script = document.createElement('script');
     script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id='+GA_MEASUREMENT_ID;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id='+MEASUREMENT_ID;
     document.head.appendChild(script);
 
     window.dataLayer = window.dataLayer || [];
@@ -23,7 +26,7 @@
     gtag('js', new Date());
     // Configure GA: Disable automatic page_view events to avoid conflicts.
     // We will send our own custom 'view_accessed' event.
-    gtag('config', GA_MEASUREMENT_ID, {
+    gtag('config', MEASUREMENT_ID, {
         'send_page_view': false,
         'debug_mode':true
     });
